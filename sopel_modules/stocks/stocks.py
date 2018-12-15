@@ -1,4 +1,5 @@
 # coding=utf-8
+import re
 import requests
 from datetime import datetime, timedelta
 from sopel.config.types import StaticSection, ValidatedAttribute
@@ -43,6 +44,11 @@ def stock(bot, trigger):
         # Get symbol
         symbol = trigger.group(2)
 
+        # Do regex checking on symbol to ensure it's valid
+        if not re.match('^[a-zA-Z]{1,5}$', symbol):
+            bot.say('Invalid Symbol')
+            return
+
         # Get data from API
         data = get_symbol(bot, symbol)
 
@@ -54,14 +60,11 @@ def stock(bot, trigger):
             bot.say(data['Error Message'])
             return
 
-        # Get today's entry
-        today = datetime.today().strftime('%Y-%m-%d')
-        prevdate = (datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+        days = sorted(data['Time Series (Daily)'].keys(), reverse=True)
 
-        # Get previous day's results if it's before market opens
-        if today not in data['Time Series (Daily)'].keys():
-            today = (datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d')
-            prevdate = (datetime.today() - timedelta(days=2)).strftime('%Y-%m-%d')
+        # Get today's entry
+        today = days[0]
+        prevdate = days[1]
 
         # dict_keys(['1. open', '2. high', '3. low', '4. close', '5. volume'])
         open = data['Time Series (Daily)'][today]['1. open']
@@ -84,10 +87,10 @@ def stock(bot, trigger):
         )
 
         if change >= 0:
-            message += color('{change:.2f} {percentchange:.2f}%', colors.GREEN)
+            message += color('{change:.2f} ({percentchange:.2f}%)', colors.GREEN)
             message += color(u'\u2b06', colors.GREEN)
         else:
-            message += color('{change:.2f} {percentchange:.2f}%', colors.RED)
+            message += color('{change:.2f} ({percentchange:.2f}%)', colors.RED)
             message += color(u'\u2b07', colors.RED)
 
         message = message.format(
