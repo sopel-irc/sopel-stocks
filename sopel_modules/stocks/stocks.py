@@ -61,7 +61,7 @@ def stock(bot, trigger):
         # Get previous day's results if it's before market opens
         if today not in data['Time Series (Daily)'].keys():
             today = (datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d')
-            prevdate = (today - timedelta(days=2)).strftime('%Y-%m-%d')
+            prevdate = (datetime.today() - timedelta(days=2)).strftime('%Y-%m-%d')
 
         # dict_keys(['1. open', '2. high', '3. low', '4. close', '5. volume'])
         open = data['Time Series (Daily)'][today]['1. open']
