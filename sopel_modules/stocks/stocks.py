@@ -85,10 +85,10 @@ def stock(bot, trigger):
 
         if change >= 0:
             message += color('{change:.2f} {percentchange:.2f}%', colors.GREEN)
-            message += color(u'\u2191', colors.GREEN)
+            message += color(u'\u2b06', colors.GREEN)
         else:
             message += color('{change:.2f} {percentchange:.2f}%', colors.RED)
-            message += color(u'\u2193', colors.RED)
+            message += color(u'\u2b07', colors.RED)
 
         message = message.format(
             symbol=data['Meta Data']['2. Symbol'].upper(),
