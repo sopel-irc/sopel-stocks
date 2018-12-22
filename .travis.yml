@@ -1,0 +1,21 @@
+language: python
+python:
+- '3.5'
+addons:
+  apt:
+    packages:
+      - enchant
+install:
+- pip install -e .
+- pip install -r tests/requirements.txt
+script:
+- flake8 --ignore=E501,F401 ./
+deploy:
+  provider: pypi
+  user: rustybower
+  password:
+    secure: IfSYysnUYaScqe9RJjBqw311ubuG18SrAlEG2l+gouKBx268rkQXf2kYgXbuQHxT0XifUcPZvSjLeL91BLJaGWgFFwL2xkS6KBwkwzcSauykOJs1EofEB3L4mYiS/gucH3sq6ay3kTO1W+MVi/OHC8WB7FrLAc1z0tK3wsrAlc/sKErb6dWVAGr0JgFkwqHptB2tflI2BxIDp4vFAh6O80RE5/gUw/c1bGsY1MTgxAYVpeh9T+1MH8OIiiKbdCIjklolj51ty4rKZtXG7Qtd6jJ/iVvjaC5PAjADjLb+3s+B3PYam0ECbmpQl9mn1C6+qYOMKhv4s4qRT3pVyDiXI9vAEPXQgX8W5TVS4/01tdTmh8D+Ef+tQkNCrjhDRHQdU20nSv8O/ucmwCp+lx1evgGPoV+iPuI329XkEg7rGRirJn34b/GMqoTe7tuL4Pc60CA4jHoJnhseeXaHNBy5SBgBt7aNYye7IclkQtkCCivI4fkL+f/RlkV6/zgibzYBsGClYyC6PzZXxaaQ8NSsegBobENp2ukcCKsegjX3ZqZnagAmNzmSMYIXk3x/N5qGpH+tS/tEx7I+L13ePb87iIeGHHgs25Jkc3SMnHJPt5M17JCM7NCBVjQQPbiQ+PNN+CdTKbWrSb70kUiZaIxCOZTe6SGBuKO7l/++mvx6YPo=
+  on:
+    tags: true
+    python: '3.5'
+  skip_existing: true
