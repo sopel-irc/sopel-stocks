@@ -1,7 +1,1 @@
 requests
-# Development requirements
-codeclimate-test-reporter
-pycodestyle
-pytest
-pytest-cov
-mock

@@ -1,11 +1,12 @@
 [![Build Status](https://travis-ci.org/RustyBower/sopel-stocks.svg?branch=master)](https://travis-ci.org/RustyBower/sopel-stocks)
-[![Maintainability](https://api.codeclimate.com/v1/badges/43154ee379640b3e56a0/maintainability)](https://codeclimate.com/github/RustyBower/sopel-bucket/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/43154ee379640b3e56a0/test_coverage)](https://codeclimate.com/github/RustyBower/sopel-bucket/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/719931784d9152a50a09/maintainability)](https://codeclimate.com/github/RustyBower/sopel-stocks/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/719931784d9152a50a09/test_coverage)](https://codeclimate.com/github/RustyBower/sopel-stocks/test_coverage)
 
-# Sopel Bucket
+# sopel-stocks
+sopel-stocks is an stock lookup module for Sopel
 
-Sopel Bucket is a rewritten module from the old Bucket
-
-# Requirements
-
-apt-get install libmysqlclient-dev
+## Usage
+```
+.stock djia
+.stock msft
+```
