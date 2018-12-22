@@ -67,11 +67,11 @@ def stock(bot, trigger):
         prevdate = days[1]
 
         # dict_keys(['1. open', '2. high', '3. low', '4. close', '5. volume'])
-        open = data['Time Series (Daily)'][today]['1. open']
-        high = data['Time Series (Daily)'][today]['2. high']
-        low = data['Time Series (Daily)'][today]['3. low']
+        # open = data['Time Series (Daily)'][today]['1. open']
+        # high = data['Time Series (Daily)'][today]['2. high']
+        # low = data['Time Series (Daily)'][today]['3. low']
         close = data['Time Series (Daily)'][today]['4. close']
-        volume = data['Time Series (Daily)'][today]['5. volume']
+        # volume = data['Time Series (Daily)'][today]['5. volume']
 
         # Get yesterday's close
         prevclose = data['Time Series (Daily)'][prevdate]['4. close']
@@ -83,7 +83,7 @@ def stock(bot, trigger):
         percentchange = float(change) / float(prevclose) * 100
 
         message = (
-                '{symbol} ${close:.2f} '
+            '{symbol} ${close:.2f} '
         )
 
         if change >= 0:
