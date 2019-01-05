@@ -30,6 +30,7 @@ setup(
     version='1.0.1',
     description='A working re-implementation of the stock module for Sopel',
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/markdown',  # This is important!
     author='Rusty Bower',
     author_email='rusty@rustybower.com',
     url='http://github.com/rustybower/sopel-stocks',
