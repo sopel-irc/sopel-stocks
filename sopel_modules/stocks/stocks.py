@@ -83,14 +83,14 @@ def stock(bot, trigger):
         percentchange = float(change) / float(prevclose) * 100
 
         message = (
-            '{symbol} ${close:.2f} '
+            '{symbol} ${close:g} '
         )
 
         if change >= 0:
-            message += color('{change:.2f} ({percentchange:.2f}%)', colors.GREEN)
+            message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
             message += color(u'\u2b06', colors.GREEN)
         else:
-            message += color('{change:.2f} ({percentchange:.2f}%)', colors.RED)
+            message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
             message += color(u'\u2b07', colors.RED)
 
         message = message.format(
