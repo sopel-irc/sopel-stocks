@@ -6,6 +6,18 @@
 # sopel-stocks
 sopel-stocks is an stock lookup module for Sopel
 
+## Requirements
+#### API Key
+```
+https://www.alphavantage.co/support/#api-key
+```
+
+#### Python Requirements
+```
+requests
+sopel
+```
+
 ## Usage
 ```
 .stock djia
