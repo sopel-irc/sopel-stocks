@@ -2,14 +2,17 @@
 import re
 import requests
 from datetime import datetime, timedelta
-from sopel.config.types import StaticSection, ValidatedAttribute
+from sopel.config.types import NO_DEFAULT, StaticSection, ValidatedAttribute
 from sopel.formatting import color, colors
+from sopel.logger import get_logger
 from sopel.module import commands, example, NOLIMIT
+
+logger = get_logger(__name__)
 
 
 # Define our sopel stocks configuration
 class StocksSection(StaticSection):
-    api_key = ValidatedAttribute('api_key', str, default='')
+    api_key = ValidatedAttribute('api_key', default=NO_DEFAULT)
 
 
 def setup(bot):
@@ -57,7 +60,7 @@ def stock(bot, trigger):
             return
 
         if 'Error Message' in data.keys():
-            bot.say(data['Error Message'])
+            logger.error(data['Error Message'])
             return
 
         days = sorted(data['Time Series (Daily)'].keys(), reverse=True)
