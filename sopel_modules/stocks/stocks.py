@@ -1,17 +1,34 @@
 # coding=utf-8
+"""
+stocks.py - Sopel Stocks Plugin
+"""
 import re
 import requests
 from datetime import datetime, timedelta
-from sopel.config.types import NO_DEFAULT, StaticSection, ValidatedAttribute
+from sopel.config.types import NO_DEFAULT, ChoiceAttribute, StaticSection, ValidatedAttribute
 from sopel.formatting import color, colors
 from sopel.logger import get_logger
 from sopel.module import commands, example, NOLIMIT
 
+from .providers.alphavantage import alphavantage
+from .providers.iexcloud import iexcloud
+
 logger = get_logger(__name__)
+
+
+STOCK_PROVIDERS = [
+    'alphavantage',
+    'iexcloud',
+]
 
 
 # Define our sopel stocks configuration
 class StocksSection(StaticSection):
+    provider = ChoiceAttribute(
+        'provider',
+        STOCK_PROVIDERS,
+        default=NO_DEFAULT
+    )
     api_key = ValidatedAttribute('api_key', default=NO_DEFAULT)
 
 
@@ -23,18 +40,27 @@ def setup(bot):
 def configure(config):
     config.define_section('stocks', StocksSection, validate=False)
     config.stocks.configure_setting(
+        'provider',
+        'Enter stocks provider ({}):'.format(', '.join(STOCK_PROVIDERS)),
+        default=NO_DEFAULT
+    )
+    config.stocks.configure_setting(
         'api_key',
-        'Enter AlphaVantage API Key:'
+        'Enter provider API key:',
+        default=NO_DEFAULT
     )
 
 
-def get_symbol(bot, symbol):
-    data = None
-    try:
-        data = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}'.format(symbol=symbol, api_key=bot.config.stocks.api_key)).json()
-        return data
-    except Exception:
-        raise
+def get_price(bot, symbol):
+    # Alphavantage
+    if bot.config.stocks.provider == 'alphavantage':
+        return alphavantage(bot, symbol)
+    # IEX Cloud
+    elif bot.config.stocks.provider == 'iexcloud':
+        return iexcloud(bot, symbol)
+    # Unsupported Provider
+    else:
+        raise Exception('Error: Unsupported Provider')
 
 
 @commands('stock')
@@ -53,49 +79,16 @@ def stock(bot, trigger):
             return
 
         # Get data from API
-        data = get_symbol(bot, symbol)
-
-        if not data:
-            bot.say("An error occurred.")
-            return
-
-        if 'Error Message' in data.keys():
-            logger.error(data['Error Message'])
-            return
-
-        days = sorted(data['Time Series (Daily)'].keys(), reverse=True)
-
-        # Only 1 day of history, likely this is a new stock on the market
-        if len(days) == 1:
-            today = days[0]
-            close = data['Time Series (Daily)'][today]['4. close']
-            prevclose = data['Time Series (Daily)'][today]['1. open']
-        else:
-            # Get today's entry
-            today = days[0]
-            prevdate = days[1]
-
-            # dict_keys(['1. open', '2. high', '3. low', '4. close', '5. volume'])
-            # open = data['Time Series (Daily)'][today]['1. open']
-            # high = data['Time Series (Daily)'][today]['2. high']
-            # low = data['Time Series (Daily)'][today]['3. low']
-            close = data['Time Series (Daily)'][today]['4. close']
-            # volume = data['Time Series (Daily)'][today]['5. volume']
-
-            # Get yesterday's close
-            prevclose = data['Time Series (Daily)'][prevdate]['4. close']
-
-        # Calculate change
-        change = float(close) - float(prevclose)
-
-        # Calculate percentage change
-        percentchange = float(change) / float(prevclose) * 100
+        try:
+            data = get_price(bot, symbol)
+        except Exception as e:
+            return bot.say(str(e))
 
         message = (
             '{symbol} ${close:g} '
         )
 
-        if change >= 0:
+        if data['change'] >= 0:
             message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
             message += color(u'\u2b06', colors.GREEN)
         else:
@@ -103,11 +96,11 @@ def stock(bot, trigger):
             message += color(u'\u2b07', colors.RED)
 
         message = message.format(
-            symbol=data['Meta Data']['2. Symbol'].upper(),
-            close=float(close),
-            change=float(change),
-            percentchange=float(percentchange),
+            symbol=symbol.upper(),
+            close=float(data['close']),
+            change=float(data['change']),
+            percentchange=float(data['percentchange']),
         )
 
         # Print results to channel
-        bot.say(message)
+        return bot.say(message)

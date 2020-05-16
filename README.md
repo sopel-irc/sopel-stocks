@@ -4,12 +4,13 @@
 [![PyPI version](https://badge.fury.io/py/sopel-modules.stocks.svg)](https://badge.fury.io/py/sopel-modules.stocks)
 
 # sopel-stocks
-sopel-stocks is an stock lookup module for Sopel
+sopel-stocks is an stock lookup plugin for Sopel
 
 ## Requirements
 #### API Key
 ```
 https://www.alphavantage.co/support/#api-key
+https://iexcloud.io/console/tokens
 ```
 
 #### Python Requirements
