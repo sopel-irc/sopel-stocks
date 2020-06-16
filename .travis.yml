@@ -1,15 +1,16 @@
 language: python
 python:
-- '3.5'
-addons:
-  apt:
-    packages:
-      - enchant
+  - '3.5'
+  - '3.6'
+  - '3.7'
+  - '3.8'
+before_install:
+  - pip install git+https://github.com/sopel-irc/sopel.git
 install:
-- pip install -e .
-- pip install -r tests/requirements.txt
+  - pip install -e .
+  - pip install -r tests/requirements.txt
 script:
-- flake8 --ignore=E501,F401 ./
+  - flake8 --ignore=E501,F401 ./
 deploy:
   provider: pypi
   user: rustybower
