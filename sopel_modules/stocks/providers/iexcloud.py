@@ -11,6 +11,6 @@ def iexcloud(bot, symbol):
     data = {
         'close': r.json()['latestPrice'],
         'change': r.json()['change'],
-        'percentchange': r.json()['changePercent']
+        'percentchange': r.json()['changePercent'] * 100
     }
     return data
