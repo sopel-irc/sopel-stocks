@@ -74,7 +74,7 @@ def stock(bot, trigger):
         symbol = trigger.group(2)
 
         # Do regex checking on symbol to ensure it's valid
-        if not re.match('^[a-zA-Z]{1,5}$', symbol):
+        if not re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol):
             bot.say('Invalid Symbol')
             return
 
