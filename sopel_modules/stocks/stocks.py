@@ -88,19 +88,27 @@ def stock(bot, trigger):
             '{symbol} ${close:g} '
         )
 
-        if data['change'] >= 0:
-            message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
-            message += color(u'\u2b06', colors.GREEN)
+        # Change is None, usually on IPOs
+        if not data['change']:
+            message = message.format(
+                symbol=symbol.upper(),
+                close=float(data['close']),
+            )
+        # Otherwise, check change versus previous day
         else:
-            message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
-            message += color(u'\u2b07', colors.RED)
+            if data['change'] >= 0:
+                message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
+                message += color(u'\u2b06', colors.GREEN)
+            else:
+                message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
+                message += color(u'\u2b07', colors.RED)
 
-        message = message.format(
-            symbol=symbol.upper(),
-            close=float(data['close']),
-            change=float(data['change']),
-            percentchange=float(data['percentchange']),
-        )
+            message = message.format(
+                symbol=symbol.upper(),
+                close=float(data['close']),
+                change=float(data['change']),
+                percentchange=float(data['percentchange']),
+            )
 
         # Print results to channel
         return bot.say(message)
