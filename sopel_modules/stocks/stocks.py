@@ -66,6 +66,7 @@ def get_price(bot, symbol):
 @commands('stock')
 @example('.stock msft')
 def stock(bot, trigger):
+    """Get the current price for a given stock."""
     # If the user types .stock with no arguments, let them know proper usage
     if not trigger.group(2):
         return
