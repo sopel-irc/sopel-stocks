@@ -3,6 +3,8 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/sopel-irc/sopel-stocks.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-stocks/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sopel-irc/sopel-stocks.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-stocks/context:python)
 
+**Maintainer:** [@RustyBower](https://github.com/rustybower)
+
 # sopel-stocks
 sopel-stocks is an stock lookup plugin for Sopel
 
