@@ -1,7 +1,7 @@
-[![Build Status](https://github.com/sopel-irc/sopel-stocks/actions/workflows/python-tests.yml/badge.svg?branch=master)](https://github.com/sopel-irc/sopel-stocks/actions/workflows/python-tests.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/719931784d9152a50a09/maintainability)](https://codeclimate.com/github/RustyBower/sopel-stocks/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/719931784d9152a50a09/test_coverage)](https://codeclimate.com/github/RustyBower/sopel-stocks/test_coverage)
+[![Python Tests](https://github.com/sopel-irc/sopel-stocks/actions/workflows/python-tests.yml/badge.svg?branch=master)](https://github.com/sopel-irc/sopel-stocks/actions/workflows/python-tests.yml)
 [![PyPI version](https://badge.fury.io/py/sopel-modules.stocks.svg)](https://badge.fury.io/py/sopel-modules.stocks)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/sopel-irc/sopel-stocks.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-stocks/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sopel-irc/sopel-stocks.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-stocks/context:python)
 
 # sopel-stocks
 sopel-stocks is an stock lookup plugin for Sopel
