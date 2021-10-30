@@ -6,12 +6,13 @@ import re
 import requests
 from datetime import datetime, timedelta
 from sopel.config.types import NO_DEFAULT, ChoiceAttribute, StaticSection, ValidatedAttribute
-from sopel.formatting import color, colors
+from sopel.formatting import bold, color, colors
 from sopel.logger import get_logger
 from sopel.module import commands, example, NOLIMIT
 
 from .providers.alphavantage import alphavantage
 from .providers.iexcloud import iexcloud
+from .providers.yahoo import yahoo
 
 logger = get_logger(__name__)
 
@@ -19,6 +20,7 @@ logger = get_logger(__name__)
 STOCK_PROVIDERS = [
     'alphavantage',
     'iexcloud',
+    'yahoo'
 ]
 
 
@@ -58,6 +60,9 @@ def get_price(bot, symbol):
     # IEX Cloud
     elif bot.config.stocks.provider == 'iexcloud':
         return iexcloud(bot, symbol)
+    # Yahoo Finance
+    elif bot.config.stocks.provider == 'yahoo':
+        return yahoo(bot, symbol)
     # Unsupported Provider
     else:
         raise Exception('Error: Unsupported Provider')
@@ -86,29 +91,43 @@ def stock(bot, trigger):
             return bot.say(str(e))
 
         message = (
-            '{symbol} ${close:g} '
+            '{symbol} ' + bold('${close:g}')
         )
+
+        # Use realtime data instead of yesterday's close when available
+        if bot.config.stocks.provider == 'yahoo':
+            data['close'] = data['price'];
 
         # Change is None, usually on IPOs
         if not data['change']:
             message = message.format(
                 symbol=symbol.upper(),
-                close=float(data['close']),
+                close=data['close'],
             )
         # Otherwise, check change versus previous day
         else:
             if data['change'] >= 0:
-                message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
-                message += color(u'\u2b06', colors.GREEN)
+                message += color(' ({change:g} {percentchange:0.2f}%) \u2b06', colors.GREEN)
             else:
-                message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
-                message += color(u'\u2b07', colors.RED)
+                message += color(' ({change:g} {percentchange:0.2f}%) \u2b07', colors.RED)
 
             message = message.format(
                 symbol=symbol.upper(),
-                close=float(data['close']),
-                change=float(data['change']),
-                percentchange=float(data['percentchange']),
+                close=data['close'],
+                change=data['change'],
+                percentchange=data['percentchange'],
+            )
+
+        # Current trading session data
+        if bot.config.stocks.provider == 'yahoo':
+            message2 = ' | '
+            message2 += color('L {low:g} ', colors.RED);
+            message2 += color('H {high:g} ', colors.GREEN);
+            message2 += '| Cap {cap}';
+            message += message2.format(
+               low=data['low'],
+               high=data['high'],
+               cap=data['cap'],
             )
 
         # Print results to channel
