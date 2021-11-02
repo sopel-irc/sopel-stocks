@@ -91,28 +91,33 @@ def stock(bot, trigger):
             return bot.say(str(e))
 
         message = (
-            '{symbol} ' + bold('${close:g}')
+            '{symbol} {currencySymbol}' + bold('{close:0.2f}')
         )
 
         # Use realtime data instead of yesterday's close when available
         if bot.config.stocks.provider == 'yahoo':
             data['close'] = data['price'];
 
+        if not 'currencySymbol' in data:
+            data['currencySymbol'] = "$"
+
         # Change is None, usually on IPOs
         if not data['change']:
             message = message.format(
                 symbol=symbol.upper(),
+                currencySymbol=data['currencySymbol'],
                 close=data['close'],
             )
         # Otherwise, check change versus previous day
         else:
             if data['change'] >= 0:
-                message += color(' ({change:g} {percentchange:0.2f}%) \u2b06', colors.GREEN)
+                message += color(' ({change:+0.2f} {percentchange:+0.2f}%) \u2b06', colors.GREEN)
             else:
-                message += color(' ({change:g} {percentchange:0.2f}%) \u2b07', colors.RED)
+                message += color(' ({change:+0.2f} {percentchange:+0.2f}%) \u2b07', colors.RED)
 
             message = message.format(
                 symbol=symbol.upper(),
+                currencySymbol=data['currencySymbol'],
                 close=data['close'],
                 change=data['change'],
                 percentchange=data['percentchange'],
@@ -120,13 +125,22 @@ def stock(bot, trigger):
 
         # Current trading session data
         if bot.config.stocks.provider == 'yahoo':
+            if data['marketState'] == "PRE":
+                message2 = ' | ' + color('PREMARKET', colors.GREY);
+                message += message2
+
+            if data['marketState'] == "POST":
+                message2 = ' | ' + color('POSTMARKET', colors.GREY);
+                message += message2
+
             message2 = ' | '
-            message2 += color('L {low:g} ', colors.RED);
-            message2 += color('H {high:g} ', colors.GREEN);
-            message2 += '| Cap {cap}';
+            message2 += color('L {low:0.2f} ', colors.RED);
+            message2 += color('H {high:0.2f} ', colors.GREEN);
+            message2 += '| {name} | Cap {cap}';
             message += message2.format(
                low=data['low'],
                high=data['high'],
+               name=data['name'],
                cap=data['cap'],
             )
 
