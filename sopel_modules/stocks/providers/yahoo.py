@@ -24,13 +24,16 @@ def yahoo(bot, symbol):
     q = r.json()['quoteSummary']['result'][0]['price']
 
     if q['marketState'] == "PRE":
+        if q['currencySymbol'] == "$" and q['currency'] != "USD":
+            q['currencySymbol'] = q['currency'] + q['currencySymbol']
+
         data = {
             'price': q['preMarketPrice']['raw'],
             'change': q['preMarketChange']['raw'],
             'percentchange': q['preMarketChangePercent']['raw'] * 100,
             'low': q['regularMarketDayLow']['raw'],
             'high': q['regularMarketDayHigh']['raw'],
-            'cap': q['marketCap']['fmt'],
+            'cap': q['currencySymbol'] + q['marketCap']['fmt'],
             'name': q['longName'].rsplit(',', 1)[0],
             'close': q['regularMarketPreviousClose']['raw'],
             'currencySymbol': q['currencySymbol'],
@@ -39,13 +42,16 @@ def yahoo(bot, symbol):
         return data
 
     if q['marketState'] == "POST":
+        if q['currencySymbol'] == "$" and q['currency'] != "USD":
+            q['currencySymbol'] = q['currency'] + q['currencySymbol']
+
         data = {
             'price': q['postMarketPrice']['raw'],
             'change': q['postMarketChange']['raw'],
             'percentchange': q['postMarketChangePercent']['raw'] * 100,
             'low': q['regularMarketDayLow']['raw'],
             'high': q['regularMarketDayHigh']['raw'],
-            'cap': q['marketCap']['fmt'],
+            'cap': q['currencySymbol'] + q['marketCap']['fmt'],
             'name': q['longName'].rsplit(',', 1)[0],
             'close': q['regularMarketPreviousClose']['raw'],
             'currencySymbol': q['currencySymbol'],
@@ -53,13 +59,16 @@ def yahoo(bot, symbol):
         }
         return data
 
+    if q['currencySymbol'] == "$" and q['currency'] != "USD":
+        q['currencySymbol'] = q['currency'] + q['currencySymbol']
+
     data = {
         'price': q['regularMarketPrice']['raw'],
         'change': q['regularMarketChange']['raw'],
         'percentchange': q['regularMarketChangePercent']['raw'] * 100,
         'low': q['regularMarketDayLow']['raw'],
         'high': q['regularMarketDayHigh']['raw'],
-        'cap': q['marketCap']['fmt'],
+        'cap': q['currencySymbol'] + q['marketCap']['fmt'],
         'name': q['longName'].rsplit(',', 1)[0],
         'close': q['regularMarketPreviousClose']['raw'],
         'currencySymbol': q['currencySymbol'],
