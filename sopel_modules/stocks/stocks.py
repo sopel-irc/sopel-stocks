@@ -68,6 +68,11 @@ def get_price(bot, symbol):
         raise Exception('Error: Unsupported Provider')
 
 
+def name_scrubber(name):
+    p = re.compile(',? (ltd|ltee|llc|corp(oration)?|inc(orporated)?|limited|plc)\.?$', re.I)
+    return p.sub('', name)
+
+
 @commands('stock')
 @example('.stock msft')
 def stock(bot, trigger):
@@ -96,7 +101,7 @@ def stock(bot, trigger):
             return bot.say(str(e))
 
         message = (
-            '{symbol} {currencySymbol}' + bold('{close:0.2f}')
+            '{symbol} {d[currencySymbol]}' + bold('{d[close]:,.2f}')
         )
 
         # Use realtime data instead of yesterday's close when available
@@ -106,47 +111,42 @@ def stock(bot, trigger):
         if not 'currencySymbol' in data:
             data['currencySymbol'] = "$"
 
+        if 'name' in data:
+            data['name'] = name_scrubber(data['name'])
+
         # Change is None, usually on IPOs
         if not data['change']:
             message = message.format(
                 symbol=symbol.upper(),
-                currencySymbol=data['currencySymbol'],
-                close=data['close'],
+                d=data,
             )
         # Otherwise, check change versus previous day
         else:
             if data['change'] >= 0:
-                message += color(' ({change:+0.2f} {percentchange:+0.2f}%) \u2b06', colors.GREEN)
+                message += color(u' \u2b06 {d[change]:+,.2f} {d[percentchange]:+,.2f}%', colors.GREEN)
             else:
-                message += color(' ({change:+0.2f} {percentchange:+0.2f}%) \u2b07', colors.RED)
+                message += color(u' \u2b07 {d[change]:+,.2f} {d[percentchange]:+,.2f}%', colors.RED)
 
             message = message.format(
                 symbol=symbol.upper(),
-                currencySymbol=data['currencySymbol'],
-                close=data['close'],
-                change=data['change'],
-                percentchange=data['percentchange'],
+                d=data,
             )
 
         # Current trading session data
         if bot.config.stocks.provider == 'yahoo':
             if data['marketState'] == "PRE":
-                message2 = ' | ' + color('PREMARKET', colors.GREY);
-                message += message2
+                message += color(' (PREMARKET)', colors.LIGHT_GREY)
 
             if data['marketState'] == "POST":
-                message2 = ' | ' + color('POSTMARKET', colors.GREY);
-                message += message2
+                message += color(' (POSTMARKET)', colors.LIGHT_GREY)
 
             message2 = ' | '
-            message2 += color('L {low:0.2f} ', colors.RED);
-            message2 += color('H {high:0.2f} ', colors.GREEN);
-            message2 += '| {name} | Cap {cap}';
-            message += message2.format(
-               low=data['low'],
-               high=data['high'],
-               name=data['name'],
-               cap=data['cap'],
+            message2 += color('{d[low]:,.2f}', colors.RED) + '-'
+            message2 += color('{d[high]:,.2f}', colors.GREEN)
+            message2 += ' | Cap {d[cap]}';
+            message = ('[{d[name]}] {message}' + message2).format(
+                message=message,
+                d=data
             )
 
         # Print results to channel

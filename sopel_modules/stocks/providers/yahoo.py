@@ -23,44 +23,55 @@ def yahoo(bot, symbol):
 
     q = r.json()['quoteSummary']['result'][0]['price']
 
-    if q['marketState'] == "PRE":
-        if q['currencySymbol'] == "$" and q['currency'] != "USD":
-            q['currencySymbol'] = q['currency'] + q['currencySymbol']
+    if not 'marketState' in q:
+        raise Exception("Unable to parse market data for {}".format(symbol))
 
+    if not 'regularMarketPrice' in q or not q['regularMarketPrice']:
+        raise Exception("Unable to parse market data for {}".format(symbol))
+
+    if 'currencySymbol' in q:
+        if q['currencySymbol'] == "$" and q['currency'] == "CAD":
+            cs = "C$"
+        elif q['currencySymbol'] == "$" and q['currency'] != "USD":
+            cs = q['currency'] + q['currencySymbol']
+        else:
+            cs = q['currencySymbol']
+    else:
+        cs = "$"
+
+    cap = 'N/A'
+    if 'fmt' in q['marketCap']:
+        cap = cs + q['marketCap']['fmt']
+
+    if q['quoteType'] == "EQUITY" and q['marketState'] == "PRE":
         data = {
             'price': q['preMarketPrice']['raw'],
             'change': q['preMarketChange']['raw'],
             'percentchange': q['preMarketChangePercent']['raw'] * 100,
             'low': q['regularMarketDayLow']['raw'],
             'high': q['regularMarketDayHigh']['raw'],
-            'cap': q['currencySymbol'] + q['marketCap']['fmt'],
-            'name': q['longName'].rsplit(',', 1)[0],
+            'cap': cap,
+            'name': q['longName'],
             'close': q['regularMarketPreviousClose']['raw'],
-            'currencySymbol': q['currencySymbol'],
+            'currencySymbol': cs,
             'marketState': q['marketState'],
         }
         return data
 
-    if q['marketState'] == "POST":
-        if q['currencySymbol'] == "$" and q['currency'] != "USD":
-            q['currencySymbol'] = q['currency'] + q['currencySymbol']
-
+    if q['quoteType'] == "EQUITY" and q['marketState'] == "POST":
         data = {
             'price': q['postMarketPrice']['raw'],
             'change': q['postMarketChange']['raw'],
             'percentchange': q['postMarketChangePercent']['raw'] * 100,
             'low': q['regularMarketDayLow']['raw'],
             'high': q['regularMarketDayHigh']['raw'],
-            'cap': q['currencySymbol'] + q['marketCap']['fmt'],
-            'name': q['longName'].rsplit(',', 1)[0],
+            'cap': cap,
+            'name': q['longName'],
             'close': q['regularMarketPreviousClose']['raw'],
-            'currencySymbol': q['currencySymbol'],
+            'currencySymbol': cs,
             'marketState': q['marketState'],
         }
         return data
-
-    if q['currencySymbol'] == "$" and q['currency'] != "USD":
-        q['currencySymbol'] = q['currency'] + q['currencySymbol']
 
     data = {
         'price': q['regularMarketPrice']['raw'],
@@ -68,10 +79,10 @@ def yahoo(bot, symbol):
         'percentchange': q['regularMarketChangePercent']['raw'] * 100,
         'low': q['regularMarketDayLow']['raw'],
         'high': q['regularMarketDayHigh']['raw'],
-        'cap': q['currencySymbol'] + q['marketCap']['fmt'],
-        'name': q['longName'].rsplit(',', 1)[0],
+        'cap': cap,
+        'name': q['longName'],
         'close': q['regularMarketPreviousClose']['raw'],
-        'currencySymbol': q['currencySymbol'],
+        'currencySymbol': cs,
         'marketState': q['marketState'],
     }
     return data
