@@ -104,9 +104,9 @@ def stock(bot, trigger):
             '{symbol} {d[currencySymbol]}' + bold('{d[close]:,.2f}')
         )
 
-        # Use realtime data instead of yesterday's close when available
+        # Use enhanced + realtime data instead of yesterday's close when available
         if bot.config.stocks.provider == 'yahoo':
-            data['close'] = data['price'];
+            message = '{d[name]} ({symbol}) | {d[currencySymbol]}' + bold('{d[price]:,.2f}')
 
         if not 'currencySymbol' in data:
             data['currencySymbol'] = "$"
@@ -134,17 +134,23 @@ def stock(bot, trigger):
 
         # Current trading session data
         if bot.config.stocks.provider == 'yahoo':
+            message2 = ''
             if data['marketState'] == "PRE":
-                message += color(' (PREMARKET)', colors.LIGHT_GREY)
+                message += color(' PREMARKET', colors.LIGHT_GREY)
 
             if data['marketState'] == "POST":
-                message += color(' (POSTMARKET)', colors.LIGHT_GREY)
+                message += color(' POSTMARKET', colors.LIGHT_GREY)
+                message2 += ' | CLOSE {d[currencySymbol]}{d[close]:,.2f} '
+                if data['rmchange'] >= 0:
+                    message2 += color('{d[rmchange]:+,.2f} {d[rmpercentchange]:+,.2f}%', colors.GREEN)
+                else:
+                    message2 += color('{d[rmchange]:+,.2f} {d[rmpercentchange]:+,.2f}%', colors.RED)
 
-            message2 = ' | '
-            message2 += color('{d[low]:,.2f}', colors.RED) + '-'
-            message2 += color('{d[high]:,.2f}', colors.GREEN)
+            message2 += ' | '
+            message2 += color('L {d[low]:,.2f}', colors.RED) + ' '
+            message2 += color('H {d[high]:,.2f}', colors.GREEN)
             message2 += ' | Cap {d[cap]}';
-            message = ('[{d[name]}] {message}' + message2).format(
+            message = ('{message}' + message2).format(
                 message=message,
                 d=data
             )
