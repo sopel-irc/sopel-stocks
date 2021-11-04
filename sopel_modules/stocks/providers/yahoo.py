@@ -58,9 +58,10 @@ def yahoo(bot, symbol):
         }
         return data
 
-    if q['quoteType'] == "EQUITY" and (
+    if q['quoteType'] == "EQUITY" and ((
         q['marketState'] == "POST" or
-        q['marketState'] == "POSTPOST"):
+        q['marketState'] == "POSTPOST") and
+        'raw' in q['postMarketPrice']):
         data = {
             'price': q['postMarketPrice']['raw'],
             'change': q['postMarketChange']['raw'],
