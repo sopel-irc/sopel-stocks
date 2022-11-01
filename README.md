@@ -33,7 +33,7 @@ However, if you want or need to configure this plugin manually, you will need to
     provider = alphavantage (or iexcloud)
 
 ## Requirements
-#### API Key
+#### API Key (from 1 of the following providers)
 
     https://www.alphavantage.co/support/#api-key
     https://iexcloud.io/console/tokens
@@ -45,8 +45,10 @@ However, if you want or need to configure this plugin manually, you will need to
 
 ## Usage
 
-    .stock djia
-    DJIA $26559.5 110 (0.42%)⬆
-    
     .stock msft
-    MSFT $123.37 1.6 (1.31%)⬆
+    <sopel> MSFT $123.37 1.6 (1.31%)⬆
+
+    .stock aapl amzn goog
+    <sopel> AAPL $150.83 -2.51 (-1.64%)⬇
+    <sopel> AMZN $97.06 -5.38 (-5.25%)⬇
+    <sopel> GOOG $90.445 -4.215 (-4.45%)⬇

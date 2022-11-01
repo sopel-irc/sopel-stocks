@@ -65,51 +65,52 @@ def get_price(bot, symbol):
 
 @commands('stock')
 @example('.stock msft')
+@example('.stock amzn msft goog')
 def stock(bot, trigger):
-    """Get the current price for a given stock."""
+    """Get the current price for given stock(s)."""
     # If the user types .stock with no arguments, let them know proper usage
     if not trigger.group(2):
         return
     else:
         # Get symbol
-        symbol = trigger.group(2)
+        symbols = trigger.group(2).split()
 
         # Do regex checking on symbol to ensure it's valid
-        if not re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol):
-            bot.say('Invalid Symbol')
-            return
+        symbols = [symbol for symbol in symbols if re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol)]
 
         # Get data from API
-        try:
-            data = get_price(bot, symbol)
-        except Exception as e:
-            return bot.say(str(e))
+        for symbol in symbols:
+            try:
+                data = get_price(bot, symbol)
+            except Exception as e:
+                return bot.say(str(e))
 
-        message = (
-            '{symbol} ${close:g} '
-        )
-
-        # Change is None, usually on IPOs
-        if not data['change']:
-            message = message.format(
-                symbol=symbol.upper(),
-                close=float(data['close']),
+            message = (
+                '{symbol} ${close:g} '
             )
-        # Otherwise, check change versus previous day
-        else:
-            if data['change'] >= 0:
-                message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
-                message += color(u'\u2b06', colors.GREEN)
+
+            # Change is None, usually on IPOs
+            if not data['change']:
+                message = message.format(
+                    symbol=symbol.upper(),
+                    close=float(data['close']),
+                )
+            # Otherwise, check change versus previous day
             else:
-                message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
-                message += color(u'\u2b07', colors.RED)
+                if data['change'] >= 0:
+                    message += color('{change:g} ({percentchange:.2f}%)', colors.GREEN)
+                    message += color(u'\u2b06', colors.GREEN)
+                else:
+                    message += color('{change:g} ({percentchange:.2f}%)', colors.RED)
+                    message += color(u'\u2b07', colors.RED)
 
-            message = message.format(
-                symbol=symbol.upper(),
-                close=float(data['close']),
-                change=float(data['change']),
-                percentchange=float(data['percentchange']),
-            )
+                message = message.format(
+                    symbol=symbol.upper(),
+                    close=float(data['close']),
+                    change=float(data['change']),
+                    percentchange=float(data['percentchange']),
+                )
 
-        # Print results to channel
-        return bot.say(message)
+            # Print results to channel
+            bot.say(message)
+        return
