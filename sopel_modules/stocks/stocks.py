@@ -3,12 +3,11 @@
 stocks.py - Sopel Stocks Plugin
 """
 import re
-import requests
 from datetime import datetime, timedelta
 from sopel.config.types import NO_DEFAULT, ChoiceAttribute, StaticSection, ValidatedAttribute
 from sopel.formatting import color, colors
 from sopel.logger import get_logger
-from sopel.module import commands, example, NOLIMIT
+from sopel.module import commands, example
 
 from .providers.alphavantage import alphavantage
 from .providers.iexcloud import iexcloud
