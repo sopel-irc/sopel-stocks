@@ -27,7 +27,7 @@ with open('tests/requirements.txt') as dev_requirements_file:
 
 setup(
     name='sopel_modules.stocks',
-    version='1.2.0',
+    version='1.2.1',
     description='Sopel Stocks Plugin',
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/markdown',  # This is important!
