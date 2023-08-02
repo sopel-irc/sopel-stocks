@@ -30,13 +30,14 @@ However, if you want or need to configure this plugin manually, you will need to
 
     [stocks]
     api_key = API_KEY
-    provider = alphavantage (or iexcloud)
+    provider = finnhub (or alphavantage/iexcloud)
 
 ## Requirements
 #### API Key (from 1 of the following providers)
 
     https://www.alphavantage.co/support/#api-key
     https://iexcloud.io/console/tokens
+    https://finnhub.io/dashboard (recommended)
 
 #### Python Requirements
 

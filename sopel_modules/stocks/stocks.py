@@ -11,6 +11,7 @@ from sopel.module import commands, example
 
 from .providers.alphavantage import alphavantage
 from .providers.iexcloud import iexcloud
+from .providers.finnhub import finnhub
 
 logger = get_logger(__name__)
 
@@ -18,6 +19,7 @@ logger = get_logger(__name__)
 STOCK_PROVIDERS = [
     'alphavantage',
     'iexcloud',
+    'finnhub',
 ]
 
 
@@ -57,6 +59,9 @@ def get_price(bot, symbol):
     # IEX Cloud
     elif bot.config.stocks.provider == 'iexcloud':
         return iexcloud(bot, symbol)
+    # IEX Cloud
+    elif bot.config.stocks.provider == 'finnhub':
+        return finnhub(bot, symbol)
     # Unsupported Provider
     else:
         raise Exception('Error: Unsupported Provider')

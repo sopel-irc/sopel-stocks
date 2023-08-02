@@ -4,7 +4,7 @@ import requests
 
 def alphavantage(bot, symbol):
     r = requests.get(
-        "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&apikey={api_key}".format(
+        "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}".format(
             symbol=symbol, api_key=bot.config.stocks.api_key
         )
     )
