@@ -1,19 +1,19 @@
-# coding=utf-8
-"""
-stocks.py - Sopel Stocks Plugin
-"""
+"""Stock lookup plugin for Sopel IRC bots"""
+from __future__ import annotations
+
 import re
-from datetime import datetime, timedelta
+
 from sopel.config.types import NO_DEFAULT, ChoiceAttribute, StaticSection, ValidatedAttribute
 from sopel.formatting import color, colors
-from sopel.logger import get_logger
-from sopel.module import commands, example
+from sopel.plugin import command, example
+from sopel.tools import get_logger
 
 from .providers.alphavantage import alphavantage
 from .providers.iexcloud import iexcloud
 from .providers.finnhub import finnhub
 
-logger = get_logger(__name__)
+
+logger = get_logger('stocks')
 
 
 STOCK_PROVIDERS = [
@@ -28,7 +28,7 @@ class StocksSection(StaticSection):
     provider = ChoiceAttribute(
         'provider',
         STOCK_PROVIDERS,
-        default=NO_DEFAULT
+        default=NO_DEFAULT,
     )
     api_key = ValidatedAttribute('api_key', default=NO_DEFAULT)
 
@@ -67,20 +67,24 @@ def get_price(bot, symbol):
         raise Exception('Error: Unsupported Provider')
 
 
-@commands('stock')
+@command('stock')
 @example('.stock msft')
 @example('.stock amzn msft goog')
 def stock(bot, trigger):
-    """Get the current price for given stock(s)."""
+    """Get the current price for given stock symbol(s)."""
     # If the user types .stock with no arguments, let them know proper usage
     if not trigger.group(2):
+        bot.reply("I need at least one stock symbol to look up.")
         return
     else:
         # Get symbol
         symbols = trigger.group(2).split()
 
         # Do regex checking on symbol to ensure it's valid
-        symbols = [symbol for symbol in symbols if re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol)]
+        symbols = [
+            symbol for symbol in symbols
+            if re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol)
+        ]
 
         # Get data from API
         for symbol in symbols:
