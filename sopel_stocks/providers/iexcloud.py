@@ -1,4 +1,4 @@
-# coding=utf-8
+"""IEX Cloud data provider for Sopel stocks plugin"""
 import requests
 
 

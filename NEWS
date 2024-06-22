@@ -1,0 +1,99 @@
+## Changelog
+
+### 1.3.0
+
+First release as `sopel-stocks`, replacing `sopel_modules.stocks`.
+
+
+### 1.2.3
+
+Added:
+* Finnhub data provider
+
+Fixed:
+* Alpha Vantage API endpoint (yet again)
+
+
+### 1.2.2
+
+Changed:
+* Further Alpha Vantage API updates
+
+
+### 1.2.1
+
+Fixed:
+* Move away from premium Alpha Vantage endpoint
+
+Meta:
+* More packaging workflow updates
+
+
+### 1.2.0
+
+Added:
+* Help message for `.stock` command
+* Multi-symbol lookup
+
+Meta:
+* Project moved to Sopel's GitHub org, and docs/workflows updated
+
+
+### 1.1.3
+
+Fixed:
+* Bug with newly IPO'd stocks
+
+
+### 1.1.2
+
+Fixed:
+* Handling input of foreign ticker symbols
+
+Meta:
+* Additional installation documentation
+
+
+### 1.1.1
+
+Fixed:
+* Presentation bug when using IEX Cloud data
+
+Meta:
+* Fixed packaging workflow
+
+
+### 1.1.0
+
+Added:
+* IEX Cloud data provider
+* New configuration to select data provider
+
+
+### 1.0.4
+
+Improved documentation and error handling
+
+
+### 1.0.3
+
+Fixed handling stocks with no prior history, i.e. new symbols
+
+
+### 1.0.2
+
+Fixed:
+* Formatting for penny stocks
+
+Meta:
+* Additional packaging tweaks
+
+
+### 1.0.1
+
+Style/packaging fixes (no corresponding release)
+
+
+### 1.0.0
+
+Initial release of `sopel_modules.stocks` module, using Alpha Vantage for data.
