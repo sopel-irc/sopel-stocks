@@ -81,7 +81,10 @@ def stock(bot, trigger):
         symbols = trigger.group(2).split()
 
         # Do regex checking on symbol to ensure it's valid
-        symbols = [symbol for symbol in symbols if re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol)]
+        symbols = [
+            symbol for symbol in symbols
+            if re.match('^([a-zA-Z0-9]{1,10}:[a-zA-Z0-9]{1,10}|[a-zA-Z0-9]{1,10})$', symbol)
+        ]
 
         # Get data from API
         for symbol in symbols:
