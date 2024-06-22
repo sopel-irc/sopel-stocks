@@ -1,4 +1,4 @@
-# coding=utf-8
+"""Alpha Vantage data provider for Sopel stocks plugin"""
 import requests
 
 

@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=63.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+platforms = ["Linux x86, x86-64"]
+
+[tool.setuptools.packages.find]
+include = ["sopel_stocks", "sopel_stocks.*"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+readme = { file=["README.md", "NEWS"], content-type="text/markdown" }
+
+[project]
+name = "sopel-stocks"
+version = "1.3.0.dev0"
+description = "Stock lookup plugin for Sopel IRC bots"
+
+authors = [
+  { name="Rusty Bower", email="rusty@rustybower.com" },
+]
+
+license = { text="MIT License" }
+dynamic = ["readme"]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: Eiffel Forum License (EFL)",
+  "License :: OSI Approved :: Eiffel Forum License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Communications :: Chat :: Internet Relay Chat",
+]
+keywords = [
+  "sopel",
+  "plugin",
+  "bot",
+  "irc",
+]
+
+requires-python = ">=3.8, <4"
+dependencies = [
+  "sopel>=8.0",
+  "requests",  # Sopel also requires this, but it's better to be explicit
+]
+
+[project.urls]
+"Homepage" = "https://github.com/sopel-irc/sopel-stocks"
+"Bug Tracker" = "https://github.com/sopel-irc/sopel-stocks/issues"
+
+[project.entry-points."sopel.plugins"]
+"stocks" = "sopel_stocks.plugin"

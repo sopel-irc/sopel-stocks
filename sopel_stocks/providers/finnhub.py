@@ -1,4 +1,4 @@
-# coding=utf-8
+"""Finnhub data provider for Sopel stocks plugin"""
 import requests
 
 
@@ -12,7 +12,7 @@ def finnhub(bot, symbol):
     if not r.json():
         raise Exception("An error occurred.")
 
-    close = r.json()["c"]
+    close = r.json()['c']
     # prevclose = r.json()['pc']
     change = r.json()["d"]
     percentchange = r.json()["dp"]
