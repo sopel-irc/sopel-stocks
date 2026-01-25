@@ -14,22 +14,20 @@ readme = { file=["README.md", "NEWS"], content-type="text/markdown" }
 
 [project]
 name = "sopel-stocks"
-version = "1.3.0.dev0"
+version = "2.0.0"
 description = "Stock lookup plugin for Sopel IRC bots"
 
 authors = [
   { name="Rusty Bower", email="rusty@rustybower.com" },
 ]
 
-license = { text="MIT License" }
+license = "MIT"
 dynamic = ["readme"]
 
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Intended Audience :: System Administrators",
-  "License :: Eiffel Forum License (EFL)",
-  "License :: OSI Approved :: Eiffel Forum License",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
