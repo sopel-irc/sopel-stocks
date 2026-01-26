@@ -14,7 +14,7 @@ readme = { file=["README.md", "NEWS"], content-type="text/markdown" }
 
 [project]
 name = "sopel-stocks"
-version = "2.0.0"
+version = "2.0.1"
 description = "Stock lookup plugin for Sopel IRC bots"
 
 authors = [

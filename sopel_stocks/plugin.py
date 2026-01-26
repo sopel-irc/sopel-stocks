@@ -90,7 +90,9 @@ def stock(bot, trigger):
         for symbol in symbols:
             try:
                 data = get_price(bot, symbol)
+                logger.info("Stock %s: %s", symbol, data)
             except Exception as e:
+                logger.error("Stock error for %s: %s", symbol, e)
                 return bot.say(str(e))
 
             message = (
