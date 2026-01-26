@@ -1,10 +1,6 @@
 """Finnhub data provider for Sopel stocks plugin"""
 import requests
 
-from sopel.tools import get_logger
-
-logger = get_logger('stocks')
-
 
 def finnhub(bot, symbol):
     r = requests.get(
@@ -12,8 +8,6 @@ def finnhub(bot, symbol):
             symbol=symbol.upper(), api_key=bot.config.stocks.api_key
         )
     )
-
-    logger.info("Finnhub API response for %s: %s", symbol, r.text)
 
     if not r.json():
         raise Exception("An error occurred.")
